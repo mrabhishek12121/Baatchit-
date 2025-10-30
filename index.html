@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baatchit - Free, Instant Chat</title>
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom styles for smooth transitions and dark background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+            color: #f3f4f6;
+        }
+        .container-box {
+            max-width: 520px; /* Slightly wider centered content */
+            width: 100%;
+            margin: auto;
+            min-height: calc(100vh - 4rem); /* Full height minus padding */
+        }
+        .chat-iframe-container {
+            /* Full height for chat view */
+            height: calc(100vh - 120px); 
+            min-height: 400px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-purple': '#8B5CF6', /* Violet 500 */
+                        'brand-hover': '#7C3AED', /* Violet 600 */
+                        'card-bg': '#1F2937',     /* Gray 800 */
+                    },
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div id="app" class="container-box">
+        <!-- ======================================================= -->
+        <!-- 1. LANDING PAGE VIEW -->
+        <!-- ======================================================= -->
+        <div id="landingPage" class="text-center transition-opacity duration-500 ease-in-out">
+            <header class="mb-12 pt-12">
+                <div class="inline-flex items-center justify-center text-brand-purple mb-4">
+                    <i data-lucide="message-circle-code" class="w-12 h-12"></i>
+                </div>
+                <h1 class="text-5xl font-extrabold text-white mb-4 leading-tight">
+                    Baatchit
+                </h1>
+                <p class="text-gray-400 text-xl font-light">
+                    Your place for instant, hassle-free conversations.
+                </p>
+            </header>
+
+            <!-- Feature Card Grid -->
+            <div class="space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-6 mb-12">
+                
+                <!-- Feature 1: 100% Free -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-xl border border-gray-700 hover:border-brand-purple transition duration-300">
+                    <div class="text-brand-purple mb-3">
+                        <i data-lucide="credit-card-off" class="w-7 h-7 mx-auto"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">100% Free</h3>
+                    <p class="text-sm text-gray-400">Jump in and chat, forever free. No sign-up walls.</p>
+                </div>
+
+                <!-- Feature 2: Safe -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-xl border border-gray-700 hover:border-brand-purple transition duration-300">
+                    <div class="text-brand-purple mb-3">
+                        <i data-lucide="check-circle" class="w-7 h-7 mx-auto"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">Safe & Ready</h3>
+                    <p class="text-sm text-gray-400">Quickly moderated environment focused on community.</p>
+                </div>
+
+                <!-- Feature 3: Secure -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-xl border border-gray-700 hover:border-brand-purple transition duration-300">
+                    <div class="text-brand-purple mb-3">
+                        <i data-lucide="bolt" class="w-7 h-7 mx-auto"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">Instant Chat</h3>
+                    <p class="text-sm text-gray-400">Fast access to the conversation, every time.</p>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <button onclick="joinChat()"
+                class="w-full sm:w-2/3 md:w-full lg:w-3/4 px-8 py-4 bg-brand-purple text-white text-xl font-semibold rounded-full shadow-2xl shadow-brand-purple/50
+                       hover:bg-brand-hover transform transition duration-200 hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-brand-purple/50"
+            >
+                Start Baatchit Now
+                <i data-lucide="message-square" class="inline-block w-6 h-6 ml-2 -mt-0.5"></i>
+            </button>
+
+            <footer class="mt-12 text-sm text-gray-600">
+                &copy; 2025 Baatchit. Powered by cBox.
+            </footer>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- 2. CHAT PAGE VIEW -->
+        <!-- ======================================================= -->
+        <div id="chatPage" class="hidden transition-opacity duration-500 ease-in-out">
+            <header class="flex justify-between items-center mb-4 pt-4">
+                <h2 class="text-2xl font-bold text-white">Live Baatchit</h2>
+                <button onclick="leaveChat()"
+                    class="flex items-center px-3 py-1 bg-gray-700 text-sm text-gray-200 rounded-lg hover:bg-gray-600 transition duration-150"
+                >
+                    <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+                    Exit
+                </button>
+            </header>
+            
+            <div class="chat-iframe-container rounded-xl overflow-hidden shadow-3xl border border-gray-700">
+                <!-- The embedded cBox chat -->
+                <iframe id="cboxIframe" src="" width="100%" height="100%" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
+            </div>
+            
+            <!-- Instructions for the user on mobile -->
+            <p class="mt-4 text-center text-sm text-gray-500">
+                <i data-lucide="info" class="inline-block w-4 h-4 mr-1"></i>
+                Set your name directly in the chat box above to start talking!
+            </p>
+        </div>
+        
+    </div>
+
+    <script>
+        // Global state for page management
+        const LANDING_PAGE = 'landingPage';
+        const CHAT_PAGE = 'chatPage';
+        // The original, unsiged embed URL
+        const CHAT_IFRAME_SRC = "https://www5.cbox.ws/box/?boxid=959200&boxtag=nvOGAZ";
+        
+        /**
+         * Switches the view between the landing page and the chat page.
+         * @param {string} pageId - The ID of the page to show (LANDING_PAGE or CHAT_PAGE).
+         */
+        function showPage(pageId) {
+            const landing = document.getElementById(LANDING_PAGE);
+            const chat = document.getElementById(CHAT_PAGE);
+            const iframe = document.getElementById('cboxIframe');
+
+            if (pageId === CHAT_PAGE) {
+                // Ensure the chat iframe src is set only when joining the chat
+                iframe.src = CHAT_IFRAME_SRC;
+                
+                landing.classList.add('hidden');
+                chat.classList.remove('hidden');
+            } else {
+                // When leaving, clear the iframe src to stop audio/data usage
+                iframe.src = "";
+                
+                chat.classList.add('hidden');
+                landing.classList.remove('hidden');
+            }
+            // Re-render lucide icons after content switch
+            lucide.createIcons();
+        }
+
+        /**
+         * Handles the action when the user clicks 'Join Chat'.
+         */
+        function joinChat() {
+            showPage(CHAT_PAGE);
+        }
+
+        /**
+         * Handles the action when the user clicks 'Exit Chat'.
+         */
+        function leaveChat() {
+            showPage(LANDING_PAGE);
+        }
+
+        // Initialize the app on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start on the landing page
+            showPage(LANDING_PAGE);
+        });
+
+    </script>
+</body>
+</html>
